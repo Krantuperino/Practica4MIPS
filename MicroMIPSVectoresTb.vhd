@@ -1,14 +1,14 @@
-----------------------------------------------------------------------
+  ----------------------------------------------------------------------
 -- Fichero: MicroMIPSVectoresTb.vhd
--- Descripción: Banco de pruebas para el microprocesador MIPS
+-- Descripciï¿½n: Banco de pruebas para el microprocesador MIPS
 --              con las memorias del programa vectores
--- Fecha última modificación: 2017-03-27
+-- Fecha ï¿½ltima modificaciï¿½n: 2017-03-27
 
--- Autores: Alberto Sánchez (2012-2017) Miguel Company (2016)
--- Asignatura: EC 1º grado
--- Grupo de Prácticas:
--- Grupo de Teoría:
--- Práctica: 4
+-- Autores: Alberto Sï¿½nchez (2012-2017) Miguel Company (2016)
+-- Asignatura: EC 1ï¿½ grado
+-- Grupo de Prï¿½cticas:
+-- Grupo de Teorï¿½a:
+-- Prï¿½ctica: 4
 -- Ejercicio: 3
 ----------------------------------------------------------------------
 
@@ -20,46 +20,46 @@ use ieee.std_logic_arith.all;
 
 entity MicroMIPSVectoresTb is
 end MicroMIPSVectoresTb;
- 
+
 architecture Test OF MicroMIPSVectoresTb is
- 
-  -- Declaración del micro (sin memoria)
+
+  -- Declaraciï¿½n del micro (sin memoria)
 	component MicroMIPS
 	port (
 		Clk : in std_logic; -- Reloj
 		NRst : in std_logic; -- Reset activo a nivel bajo
-		MemProgAddr : out std_logic_vector(31 downto 0); -- Dirección para la memoria de programa
-		MemProgData : in std_logic_vector(31 downto 0); -- Código de operación
-		MemDataAddr : out std_logic_vector(31 downto 0); -- Dirección para la memoria de datos
+		MemProgAddr : out std_logic_vector(31 downto 0); -- Direcciï¿½n para la memoria de programa
+		MemProgData : in std_logic_vector(31 downto 0); -- Cï¿½digo de operaciï¿½n
+		MemDataAddr : out std_logic_vector(31 downto 0); -- Direcciï¿½n para la memoria de datos
 		MemDataDataRead : in std_logic_vector(31 downto 0); -- Dato a leer en la memoria de datos
 		MemDataDataWrite : out std_logic_vector(31 downto 0); -- Dato a guardar en la memoria de datos
 		MemDataWE : out std_logic
 	);
 	end component;
 
-	-- Declaración de la memoria de código/programa
+	-- Declaraciï¿½n de la memoria de cï¿½digo/programa
 	component MemProgVectores
 	port (
-		MemProgAddr : in std_logic_vector(31 downto 0); -- Dirección para la memoria de programa
-		MemProgData : out std_logic_vector(31 downto 0) -- Código de operación
+		MemProgAddr : in std_logic_vector(31 downto 0); -- Direcciï¿½n para la memoria de programa
+		MemProgData : out std_logic_vector(31 downto 0) -- Cï¿½digo de operaciï¿½n
 	);
 	end component;
-	
-	-- Declaración de la memoria de código/programa
+
+	-- Declaraciï¿½n de la memoria de cï¿½digo/programa
 	component MemDataVectores
 	port (
 		Clk : in std_logic;
 		NRst : in std_logic;
-		MemDataAddr : in std_logic_vector(31 downto 0); -- Dirección para la memoria de datos
+		MemDataAddr : in std_logic_vector(31 downto 0); -- Direcciï¿½n para la memoria de datos
 		MemDataDataRead : out std_logic_vector(31 downto 0); -- Dato a leer de la memoria de datos
 		MemDataDataWrite : in std_logic_vector(31 downto 0); -- Dato a escribir de la memoria de datos
-		MemDataWE : in std_logic -- Habilitación de la escritura en la memoria de datos
+		MemDataWE : in std_logic -- Habilitaciï¿½n de la escritura en la memoria de datos
 	);
 	end component;
 
 	-- Entradas al micro
 	-- En los bancos de prueba se pueden usar valores iniciales en las
-	-- declaraciones, pero en los módulos no porque no son sintetizables
+	-- declaraciones, pero en los mï¿½dulos no porque no son sintetizables
 	signal memProgData : std_logic_vector(31 downto 0) := (others => '0');
 	signal memDataDataRead : std_logic_vector(31 downto 0) := (others => '0');
 	signal nRst : std_logic := '0';
@@ -73,11 +73,11 @@ architecture Test OF MicroMIPSVectoresTb is
 	-- Periodo de reloj
 	constant CLKPERIOD : time := 10 ns;
 
-	-- Fin simulación, por si queremos matar la simulación por falta de eventos
+	-- Fin simulaciï¿½n, por si queremos matar la simulaciï¿½n por falta de eventos
 	signal finSimu : boolean := false;
 
 begin
- 
+
 	-- Instancia del micro
 	uut: MicroMIPS
 	port map(
@@ -91,7 +91,7 @@ begin
 		MemDataWE => memDataWE
 	);
 
-	-- Instancia de la memoria de código/programa
+	-- Instancia de la memoria de cï¿½digo/programa
 	mprog: MemProgVectores
 	port map (
 		MemProgAddr => memProgAddr,
@@ -107,9 +107,9 @@ begin
 		MemDataDataRead => memDataDataRead,
 		MemDataDataWrite => memDataDataWrite,
 		MemDataWE => memDataWE
-		
+
 	);
-	
+
 	CLKPROCESS: process
 	begin
 	while (not finSimu) loop
@@ -121,18 +121,18 @@ begin
 	wait;
 	end process;
 
-	-- Proceso principal de activar señales.
-	-- Sólo hay que activar el reset. El resto del banco de pruebas
-	-- se cambia a través del valor inicial de las memorias, que
+	-- Proceso principal de activar seï¿½ales.
+	-- Sï¿½lo hay que activar el reset. El resto del banco de pruebas
+	-- se cambia a travï¿½s del valor inicial de las memorias, que
 	-- constituyen el programa a ejecutar.
 	StimProc: process
 	begin
 		nRST <= '0'; -- Reset empieza activo
 		wait for CLKPERIOD*2;
-		nRST <= '1'; -- Se desactiva el reset y empieza la ejecución
+		nRST <= '1'; -- Se desactiva el reset y empieza la ejecuciï¿½n
 		wait for CLKPERIOD*1000;
-		finSimu <= true; -- Si la simulación tiene más de 100 instrucciones
-		-- habría que esperar más antes de matar la simulación
+		finSimu <= true; -- Si la simulaciï¿½n tiene mï¿½s de 100 instrucciones
+		-- habrï¿½a que esperar mï¿½s antes de matar la simulaciï¿½n
 		wait; -- No se vuelve a hacer nada con el reset
 	end process;
 
